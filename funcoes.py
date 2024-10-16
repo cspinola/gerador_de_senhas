@@ -1,80 +1,100 @@
 import random
 import string
 
-def retornaInteiro():
+# This function ensures that users just insert numbers on characters password size
+def only_interger_acceptance():
 
-    n_passou = True
-    while n_passou:
+    words_or_strings = True
+
+    while words_or_strings:
         
         try:
-            numero = int(input('Digite um número inteiro: '))
-            n_passou = False
+            number = int(input('Type a interger: '))
+            words_or_strings = False
+
         except ValueError:
-            print("O valor informado não é um inteiro!")
-            n_passou = True
+
+            print("Just numbers 0 to 9 are allowed, try again!")
+
+            words_or_strings = True
+
+    return number
+
+
+# This function ensures that users just type y - for yes and n for no 
+def answer_y_or_n_only():
+
+    answer_not_expected = True
     
-    return numero
+    while answer_not_expected:
 
+        user_answer = str(input('Type (y/n): '))
 
-def resposta():
-    n_passou = True
-    while n_passou:
-        resposta = str(input('Digite (s/n): '))
-        if (resposta == 's' ) or (resposta == 'n' ):
-            n_passou = False
+        if (user_answer == 'y' ) or (user_answer == 'n' ):
+            answer_not_expected = False
+
         else:
-            print('O valor digitado não é s/n!')
-            n_passou = True
+
+            print('Just (y/n) is allowed, try again!')
+            answer_not_expected = True
     
-    return resposta
-
-# Como os valores gerados estão em uma lista com os caracteres separados por 
-# vírgulas essa função organiza em um ínico string e tamanho k
+    return user_answer
 
 
 
-def caracteres_senha():
-    
-    print('Deseja que a senha contenha letras maúsculas?')
-    maiusculas = resposta()
-    
-    if (maiusculas== 's'):
-        caracteres = string.ascii_letters
+
+def password_characters():
+
+
+    print('Should the password contain capital letters?')
+
+    capital_letters  = answer_y_or_n_only()
+
+
+    if (capital_letters == 'y'):
+
+        characters = string.ascii_letters
+
+
     else: 
-        caracteres = string.ascii_lowercase
-    
-    print('Deseja que a senha contenha números?')
-    numeros = resposta()
-    
-    if (numeros == 's'):
-        caracteres += string.digits
+
+        characters = string.ascii_lowercase
+
+
+    print('Should the password contain 0 to 9 numbers?')
+
+    numbers = answer_y_or_n_only()
+
+
+    if (numbers == 'y'):
+
+        characters += string.digits
         
-    print('Deseja que a senha contenha caracteres especiais?')
-    caracteres_especiais = resposta()
+
+    print('Should the password contain special characters?')
+    special_characters = answer_y_or_n_only()
     
-    if (caracteres_especiais== 's'):
-        caracteres += string.punctuation
+    if (special_characters == 'y'):
 
-    return caracteres
+        characters += string.punctuation
+
+    return characters
 
 
-def gera_senha(num_caracteres, repeticao):
+def password_generator(pass_size, not_unique):
 
     # as senhas contém letras e números e caractres especiais
-
-    caracteres = caracteres_senha()
+    caracteres = password_characters()
     
-    if (repeticao == 's'):
+    # If the characters can repeat on password
+    if (not_unique == 'y'):
 
-        sorteio = random.choices(caracteres, k = num_caracteres)
-    
-    elif (repeticao == 'n'):
-        sorteio = random.sample(caracteres, k = num_caracteres)
-    
-    # transformando lista em string:
-    senha = ', '.join(sorteio)
-    senha_str = senha.replace(", ","")
+        random_password = random.choices(caracteres, k = pass_size)
 
-    print('Segue a senha segura gerada: ')
-    print(senha_str)
-    #return senha_str
+    elif (not_unique == 'n'):
+        random_password = random.sample(caracteres, k = pass_size)
+
+    # Change a list to string:
+    password = ', '.join(random_password)
+    password_str = password.replace(", ","")
+    print(f'Your random password is: {password_str}')
